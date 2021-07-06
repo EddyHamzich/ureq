@@ -1,5 +1,5 @@
 #![forbid(unsafe_code)]
-#![warn(clippy::all)]
+#![warn(clippy::perf)]
 //! ureq is a minimal request library.
 //!
 //! The goals of this library are:

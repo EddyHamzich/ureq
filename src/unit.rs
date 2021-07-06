@@ -148,7 +148,7 @@ pub(crate) fn connect(
     let host = unit
         .url
         .host_str()
-        .ok_or(Error::BadUrl("no host".to_string()))?;
+        .ok_or_else(|| Error::BadUrl("no host".to_string()))?;
     let url = &unit.url;
     let method = &unit.req.method;
     // open socket

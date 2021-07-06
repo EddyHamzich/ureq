@@ -18,7 +18,7 @@ impl TestHeaders {
         if self.0.len() == 0 {
             ""
         } else {
-            &self.0[0].split(" ").nth(1).unwrap()
+            &self.0[0].split(' ').nth(1).unwrap()
         }
     }
 
@@ -34,7 +34,7 @@ pub fn read_headers(stream: &TcpStream) -> TestHeaders {
     let mut results = vec![];
     for line in BufReader::new(stream).lines() {
         match line {
-            Err(e) => panic!(e),
+            Err(e) => panic!("{}", e),
             Ok(line) if line == "" => break,
             Ok(line) => results.push(line),
         };

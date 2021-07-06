@@ -325,7 +325,6 @@ impl Write for Stream {
 }
 
 pub(crate) fn connect_http(unit: &Unit, hostname: &str) -> Result<Stream, Error> {
-    //
     let port = unit.url.port().unwrap_or(80);
 
     connect_host(unit, hostname, port)
@@ -361,15 +360,18 @@ pub(crate) fn connect_https(unit: &Unit, hostname: &str) -> Result<Stream, Error
 
     let sni = webpki::DNSNameRef::try_from_ascii_str(hostname)
         .map_err(|err| Error::DnsFailed(err.to_string()))?;
+
     let tls_conf: &Arc<rustls::ClientConfig> = unit
         .req
         .tls_config
         .as_ref()
         .map(|c| &c.0)
         .unwrap_or(&*TLS_CONF);
+
     let sess = rustls::ClientSession::new(&tls_conf, sni);
 
     let sock = connect_host(unit, hostname, port)?;
+    sock.set_nodelay(true)?;
 
     let stream = rustls::StreamOwned::new(sess, sock);
 

@@ -371,7 +371,6 @@ pub(crate) fn connect_https(unit: &Unit, hostname: &str) -> Result<Stream, Error
     let sess = rustls::ClientSession::new(&tls_conf, sni);
 
     let sock = connect_host(unit, hostname, port)?;
-    sock.set_nodelay(true)?;
 
     let stream = rustls::StreamOwned::new(sess, sock);
 
@@ -501,6 +500,8 @@ pub(crate) fn connect_host(unit: &Unit, hostname: &str, port: u16) -> Result<Tcp
             Proxy::verify_response(&proxy_response)?;
         }
     }
+
+    stream.set_nodelay(true)?;
 
     Ok(stream)
 }
